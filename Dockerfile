@@ -13,7 +13,7 @@ RUN sudo yum install -y maven
 RUN sudo mvn -e -f /root/pom.xml dependency:copy-dependencies -DoutputDirectory=$SPARK_HOME/jars
 
 # Make git available to people
-RUN sudo yum install git
+RUN sudo yum install -y git
 
 # Clean up Everything to reduce the image size
 # Maybe look at keeping maven installed in the future? depends on demand...

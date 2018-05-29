@@ -2,9 +2,12 @@ FROM usgseros/lcmap-spark:1.1.0-develop
 
 # Additional Conda packages that are nice to have
 RUN sudo /usr/local/bin/conda install --yes scikit-learn \
+                                            cython \
                                             seaborn \
                                             pyyaml \
                                             xarray
+
+RUN sudo /usr/local/bin/pip install cassandra-driver
 
 # Re-install Maven and do anything maveny
 COPY pom.xml /root

@@ -31,16 +31,11 @@ RUN curl -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/le
     chmod +x /usr/local/bin/lein && \
     lein && \
     mkdir /tmp/clojupyter && \
-    git clone https://github.com/clojupyter/clojupyter.git /tmp/clojupyter
-
-WORKDIR /tmp/clojupyter
-
-RUN make && \
+    git clone https://github.com/clojupyter/clojupyter.git /tmp/clojupyter && \
+    make -C /tmp/clojupyter && \
     mkdir -p $JPTR_KERNELS/clojure && \
-    cp bin/clojupyter $JPTR_KERNELS/clojure && \
-    sed 's|KERNEL|'$JPTR_KERNELS/clojure/clojupyter'|' resources/kernel.json > $JPTR_KERNELS/clojure/kernel.json
-
-WORKDIR $HOME
+    cp /tmp/clojupyter/bin/clojupyter $JPTR_KERNELS/clojure && \
+    sed 's|KERNEL|'$JPTR_KERNELS/clojure/clojupyter'|' /tmp/clojupyter/resources/kernel.json > $JPTR_KERNELS/clojure/kernel.json
 
 # Clean up Everything to reduce the image size
 RUN yum erase -y maven && \

@@ -29,10 +29,10 @@ RUN mvn -e -f /tmp/pom.xml dependency:copy-dependencies -DoutputDirectory=$SPARK
 # Clojure stuff
 RUN curl -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && \
     chmod +x /usr/local/bin/lein && \
-    lein
-
-RUN mkdir /tmp/clojupyter && \
+    lein && \
+    mkdir /tmp/clojupyter && \
     git clone https://github.com/clojupyter/clojupyter.git /tmp/clojupyter
+
 WORKDIR /tmp/clojupyter
 
 RUN make && \

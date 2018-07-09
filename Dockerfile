@@ -22,34 +22,33 @@ RUN pip install https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0-inc
     jupyter toree install --spark_home=$SPARK_HOME
 
 # Maven installations
-COPY pom.xml /root
+COPY pom.xml /tmp
 
-RUN mvn -e -f /root/pom.xml dependency:copy-dependencies -DoutputDirectory=$SPARK_HOME/jars
+RUN mvn -e -f /tmp/pom.xml dependency:copy-dependencies -DoutputDirectory=$SPARK_HOME/jars
 
 # Clojure stuff
 RUN curl -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && \
     chmod +x /usr/local/bin/lein && \
     lein
 
-RUN mkdir /root/clojupyter && \
-    git clone https://github.com/clojupyter/clojupyter.git /root/clojupyter
-WORKDIR /root/clojupyter
+RUN mkdir /tmp/clojupyter && \
+    git clone https://github.com/clojupyter/clojupyter.git /tmp/clojupyter
+WORKDIR /tmp/clojupyter
 
 RUN make && \
     mkdir -p $JPTR_KERNELS/clojure && \
     cp bin/clojupyter $JPTR_KERNELS/clojure && \
-    sed 's|KERNEL|'$JPTR_KERNELS/clojure/clojupyter'|' resources/kernel.json > $JPTR_KERNELS/clojure/kernel.json && \
-    rm -rf /root/clojupyter
+    sed 's|KERNEL|'$JPTR_KERNELS/clojure/clojupyter'|' resources/kernel.json > $JPTR_KERNELS/clojure/kernel.json
 
 WORKDIR $HOME
 
 # Clean up Everything to reduce the image size
-RUN yum erase -y maven
-RUN yum clean all
-RUN conda clean --all -y
-RUN rm -f /root/pom.xml
+RUN yum erase -y maven && \
+    yum clean all && \
+    conda clean --all -y && \
+    rm -rf /tmp/*
 
-# Remove the old version of akka for toree
+# Remove the old version of akka for toree, some env nonsense going on
 RUN rm -f $SPARK_HOME/jars/akka-actor_2.11-2.3.11.jar
 
 USER lcmap

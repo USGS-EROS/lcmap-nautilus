@@ -16,6 +16,7 @@ RUN conda install --yes scikit-learn \
                         cython \
                         seaborn \
                         pyyaml \
+                        gdal \
                         xarray && \
     pip install cassandra-driver \
                 https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0-incubating-rc5/toree-pip/toree-0.2.0.tar.gz && \
@@ -41,4 +42,8 @@ RUN curl -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/le
     sed 's|KERNEL|'$JPTR_KERNELS/clojure/clojupyter'|' /tmp/clojupyter/resources/kernel.json > $JPTR_KERNELS/clojure/kernel.json && \
     rm -rf /tmp/clojupyter
 
+RUN chown -Rf lcmap $HOME
+
 USER lcmap
+
+CMD ["jupyter", "notebook", "--port=8888", "--ip=0.0.0.0", "--no-browser", "--notebook-dir=~"]

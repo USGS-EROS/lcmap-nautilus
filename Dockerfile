@@ -14,6 +14,7 @@ RUN yum install -y maven \
 
 # Additional Python packages that are nice to have
 RUN conda install --yes scikit-learn \
+                        scikit-image \
                         cython \
                         seaborn \
                         pyyaml \

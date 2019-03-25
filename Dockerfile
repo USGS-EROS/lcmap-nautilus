@@ -15,12 +15,14 @@ RUN yum install -y maven \
 # Additional Python packages that are nice to have
 RUN conda install --yes scikit-learn \
                         scikit-image \
+                        boto3 \
                         cython \
                         seaborn \
                         pyyaml \
                         gdal \
                         py4j \
                         xarray && \
+    conda install --yes -c conda-forge xgboost && \
     pip install cassandra-driver && \
 #                 https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0-incubating-rc5/toree-pip/toree-0.2.0.tar.gz && \
 #     jupyter toree install --spark_home=$SPARK_HOME && \
